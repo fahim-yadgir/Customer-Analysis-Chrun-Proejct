@@ -22,6 +22,55 @@ select gender , count(*) as total_count
 from customer_churn
 group by gender;
 
+select * from customer_churn
+where InternetService = 'Fiber Optic';
+
+select * from customer_churn
+where PaperlessBilling = 'Yes';
+
+select * ,MonthlyCharges 
+from customer_churn
+where MonthlyCharges > 80
+order by MonthlyCharges desc;
+
+select churn , round(avg(MonthlyCharges),2) as avg_MonthlyCharges
+from customer_churn
+group by churn;
+
+select Contract ,count(*) as total_count
+from customer_churn
+group by Contract;
+
+select Contract , round(sum(TotalCharges),2) as total_revenue
+from customer_churn
+group by Contract;
+
+select InternetService,avg(tenure)
+from customer_churn
+group by InternetService;
+
+select PaymentMethod,count(*)as customer_count
+from customer_churn
+group by PaymentMethod;
+
+select * ,TotalCharges
+from customer_churn
+order by TotalCharges desc 
+limit 10;
+
+select InternetService,churn,count(*)as churn_count
+from customer_churn
+where churn = 'Yes'
+group by InternetService,churn;
+
+select count(*),count(case when OnlineSecurity = 'Yes' and OnlineBackup = 'Yes' then 1 end)as OnlineSecurity_and_OnlineBackup
+from customer_churn;
+
+select count(*)as count_SeniorCitizen,churn
+from customer_churn
+where churn = 'Yes';
+
+
 select customerID , churn,count(*)as total_count
 from customer_churn
 group by customerID,churn
@@ -48,3 +97,4 @@ limit 5;
 select round(
 count(case when churn = 'Yes' then 1 end)*100.0/count(*),2)as percentage_churn
 from customer_churn;
+
