@@ -254,3 +254,12 @@ from customer_churn
 );
 
 select * from summarytable;
+
+select PhoneService,
+		InternetService,
+        count(*)as total_customer,
+        sum(case when churn = 'Yes' then 1 end)*100.0/count(*) as churn_rate
+from customer_churn
+group by PhoneService,
+		InternetService
+order by churn_rate desc;
