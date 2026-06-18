@@ -153,3 +153,19 @@ from customer_churn
 where MonthlyCharges > (select avg(MonthlyCharges)from customer_churn)
 order by MonthlyCharges desc;
         
+
+select PaymentMethod , round(sum(TotalCharges)*100.0/(select sum(TotalCharges)from customer_churn),2)as total_chrages
+from customer_churn
+group by PaymentMethod
+order by total_chrages desc;
+
+select customerID , tenure
+from customer_churn
+where tenure > (select avg(tenure)from customer_churn)
+order by tenure desc;
+
+select Contract ,TotalCharges as total_charges
+from customer_churn
+where Contract = 'month-to-month' and TotalCharges > (select avg(TotalCharges)from customer_churn)
+order by total_charges desc;
+
