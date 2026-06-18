@@ -143,3 +143,13 @@ from customer_churn;
 select customerID,SeniorCitizen		
         from customer_churn
         where SeniorCitizen = 1;
+  
+select Contract,InternetService , round(avg(MonthlyCharges),2)as Monthly_charges
+from customer_churn
+group by Contract,InternetService;
+
+select customerID,MonthlyCharges
+from customer_churn
+where MonthlyCharges > (select avg(MonthlyCharges)from customer_churn)
+order by MonthlyCharges desc;
+        
