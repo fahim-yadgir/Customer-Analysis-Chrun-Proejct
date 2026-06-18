@@ -134,3 +134,9 @@ select * ,
 	sum(MonthlyCharges) over(partition by Contract)as sum_monthly_charges
 from customer_churn;
 
+select * ,
+	round(sum(TotalCharges) 
+    over(partition by Contract
+    order by customerID asc),2)as total_charges
+from customer_churn;
+
