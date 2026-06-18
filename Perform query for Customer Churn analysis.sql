@@ -169,3 +169,11 @@ from customer_churn
 where Contract = 'month-to-month' and TotalCharges > (select avg(TotalCharges)from customer_churn)
 order by total_charges desc;
 
+select * ,
+case
+when MonthlyCharges < 50 then 'Low Value'
+when MonthlyCharges > 50 then 'Medium Value'
+when MonthlyCharges > 80 then 'High Value'
+end customer_segments
+from customer_churn
+
