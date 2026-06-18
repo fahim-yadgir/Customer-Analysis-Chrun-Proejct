@@ -175,5 +175,82 @@ when MonthlyCharges < 50 then 'Low Value'
 when MonthlyCharges > 50 then 'Medium Value'
 when MonthlyCharges > 80 then 'High Value'
 end customer_segments
-from customer_churn
+from customer_churn;
 
+select InternetService , round(sum(TotalCharges),2)as total_revenue
+from customer_churn
+group by InternetService
+order by total_revenue desc
+limit 1;
+
+select customerID,
+		gender,
+        Dependents,
+        Contract,
+        InternetService,
+        tenure,
+        Churn
+from customer_churn
+where Contract = 'Month-to-month'
+		and InternetService = 'Fiber Optic'
+        and Tenure < 12
+        and churn = 'Yes';
+        
+        
+select 
+	case
+		when tenure between 0 and 12 then '0-12 months'
+        when tenure between 13 and 24 then '13-24 months'
+        when tenure between 25 and 48 then '25-48 months'
+        else '49+ months'
+	end as trnure_group,
+    count(*) as total_cusomer,
+    sum(case when churn = 'Yes' then 1 else 0 end)as churned_customers,
+    round(sum(case when churn = 'Yes' then 1 else 0 end)*100.0/count(*),2)
+    as churn_rate
+    from customer_churn
+    group by trnure_group
+    order by
+		case trnure_group
+			when '0-12 months' then 1
+            when '13-24 months' then 2
+            when '25-48 months' then 3
+            when '49+ months' then 4
+            end;
+            
+select customerID , 
+		round(tenure * MonthlyCharges,2) as lifetime_value
+from customer_churn;
+
+select PaymentMethod,round(sum(case when Churn = 'yes' then 1 end)*100.0/count(*),2)as high_churn_rate
+from customer_churn
+group by PaymentMethod
+order by high_churn_rate desc
+limit 3; 
+
+select PhoneService,
+	sum(case when churn = 'Yes' then 1 end)*100.0/count(*) as most_churn
+from customer_churn
+group by PhoneService;
+
+select *,
+	sum(TotalCharges) 
+    over(partition by customerID
+	order by customerID desc)as cumulative_revenu
+from customer_churn;
+
+select SeniorCitizen,
+	round(sum(case when churn = 'Yes' then 1 end) * 100.0 /count(*),2)as churn_rate
+from customer_churn
+group by SeniorCitizen;
+    
+create view summarytable as
+(select count(*) as total_customer,
+count(case when churn = 'Yes' then 1 end)as churn_customer,
+sum(case when churn = 'Yes' then 1 end)*100.0/count(*) as churn_rate,
+avg(Tenure),
+avg(MonthlyCharges)
+from customer_churn
+);
+
+select * from summarytable;
