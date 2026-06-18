@@ -98,3 +98,39 @@ select round(
 count(case when churn = 'Yes' then 1 end)*100.0/count(*),2)as percentage_churn
 from customer_churn;
 
+select customerID,TotalCharges,
+		rank() over(order by TotalCharges desc)as ranking
+from customer_churn;
+
+select Contract , sum(tenure) as 5_longest_tenure
+from customer_churn
+group by Contract
+order by 5_longest_tenure desc
+limit 5;
+
+SELECT
+    customerID,
+    Contract,
+    tenure
+FROM (
+    SELECT
+        customerID,
+        Contract,
+        tenure,
+        ROW_NUMBER() OVER (
+            PARTITION BY Contract
+            ORDER BY tenure DESC
+        ) AS rn
+    FROM customer_churn
+) t
+WHERE rn <= 5
+ORDER BY Contract, tenure DESC;
+
+select * ,
+	round(sum(TotalCharges) over(order by PaymentMethod asc),2)as contract_total_revenu
+from customer_churn;
+
+select * ,
+	sum(MonthlyCharges) over(partition by Contract)as sum_monthly_charges
+from customer_churn;
+

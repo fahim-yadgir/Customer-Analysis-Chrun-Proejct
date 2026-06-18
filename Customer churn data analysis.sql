@@ -12,6 +12,10 @@ drop column MyUnknownColumn;
 alter table customer_churn
 drop column `MyUnknownColumn_[0]`;
 
+
+        
+        
+        
 alter table customer_churn
 drop column `MyUnknownColumn_[1]`;
 
