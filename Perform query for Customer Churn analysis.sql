@@ -140,3 +140,6 @@ select * ,
     order by customerID asc),2)as total_charges
 from customer_churn;
 
+select customerID,SeniorCitizen		
+        from customer_churn
+        where SeniorCitizen = 1;
