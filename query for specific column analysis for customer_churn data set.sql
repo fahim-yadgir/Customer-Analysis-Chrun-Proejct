@@ -89,3 +89,36 @@ from customer_churn
 where OnlineSecurity = 'No'
 group by OnlineSecurity;
 
+select TechSupport,
+		round(sum(case when churn = 'Yes' then 1 end)*100.0/count(*),2)as churn_rate
+from customer_churn
+group by TechSupport;
+
+select PhoneService,
+		InternetService,
+        OnlineSecurity,
+        OnlineBackup,
+        TechSupport,
+        DeviceProtection,
+        count(*) as customer_count
+from customer_churn
+group by PhoneService,
+		InternetService,
+        OnlineSecurity,
+        OnlineBackup,
+        TechSupport,
+        DeviceProtection
+order by customer_count
+limit 1;
+
+select  customerid,
+		Contract,
+		tenure 
+from customer_churn
+where tenure < (select avg(tenure) from customer_churn);
+
+
+select * ,
+	avg(tenure) over 
+    (partition by Contract )as below_avg
+from customer_churn;
