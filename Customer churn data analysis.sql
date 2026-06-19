@@ -20,3 +20,6 @@ alter table customer_churn
 drop column `MyUnknownColumn_[2]`;
 
 select * from customer_churn;
+
+
+        
