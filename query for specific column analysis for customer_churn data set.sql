@@ -122,3 +122,14 @@ select * ,
 	avg(tenure) over 
     (partition by Contract )as below_avg
 from customer_churn;
+
+select *,
+    sum(TotalCharges) over (partition by InternetService
+	order by TotalCharges desc) as highest_paying_customers
+from customer_churn
+limit 3;
+
+select * ,
+	sum(totalcharges) over(partition by contract
+    order by totalcharges desc)as runnig_total
+from customer_churn;
