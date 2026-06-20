@@ -263,3 +263,32 @@ from customer_churn
 group by PhoneService,
 		InternetService
 order by churn_rate desc;
+
+select  PhoneService,
+		MultipleLines,
+        InternetService,
+        OnlineSecurity,
+        DeviceProtection,
+        count(case when churn = 'Yes' then 1 end)as churn_associated
+from customer_churn
+group by PhoneService,
+		MultipleLines,
+        InternetService,
+        OnlineSecurity,
+        DeviceProtection
+having churn_associated >= 20
+order by churn_associated desc;
+
+select 
+		case
+		when tenure between 0 and 12 then 'New'
+        when tenure between 13 and 36 then 'Regular'
+        when tenure between 37 and 60 then 'Loyal'
+        else '61+'
+        end as customer_segment,
+        count(tenure)as tenure
+from customer_churn
+group by customer_segment
+order by tenure desc;
+
+        

@@ -133,3 +133,80 @@ select * ,
 	sum(totalcharges) over(partition by contract
     order by totalcharges desc)as runnig_total
 from customer_churn;
+
+select *,
+	sum(MonthlyCharges) over (partition by contract
+    order by MonthlyCharges desc)
+from customer_churn;
+
+
+-- ! Subqueries
+
+select * from customer_churn
+where TotalCharges > (select avg(TotalCharges)from customer_churn)
+order by TotalCharges desc;
+
+with service_revenue as(
+		select
+			InternetService,
+            round(sum(totalcharges),2)as total_Revenue
+            from customer_churn
+            group by internetService
+        )        
+select * from service_revenue
+where total_Revenue > (select avg(total_Revenue)from service_revenue);
+
+select *,
+	sum(TotalCharges) over (partition by Contract
+						order by customerID desc)
+from customer_churn;
+
+
+with top_ten_percent as
+(
+	select customerid,
+			totalcharges,
+            ntile(10) over(order by totalcharges desc) as top_10
+            from customer_churn
+)
+select * from top_ten_percent
+		where top_10 =1
+        order by totalcharges desc;
+        
+select contract , avg(tenure)as max_avg_tenure
+from customer_churn
+group by contract
+order by max_avg_tenure desc
+limit 1;
+
+select contract,
+		max(tenure) as max_tenure
+from customer_churn
+group by contract
+order by max_tenure desc
+limit 1;
+
+select case 
+		when tenure between 0 and 12 then "New"
+        when tenure between 13 and 36 then "Regular"
+        when tenure between 37 and 60 then "Loyal"
+        else "VIP"
+        end as customer_segment,
+        count(tenure)as tenure
+from customer_churn
+group by customer_segment
+order by tenure desc;
+        
+select 
+	case 
+    when tenure between 0 and 12 then "new"
+	when tenure between 13 and 36 then "Regular"
+    when tenure between 37 and 60 then "loyal"
+    else "VIP"
+    end as customer_segment,
+    count(case when churn = "Yes" then 1 end)as churn_count,
+    round(sum(case when churn = "Yes" then 1 end)*100.0/count(*),2)as churn_rate
+from customer_churn
+group by customer_segment;
+    
+        
