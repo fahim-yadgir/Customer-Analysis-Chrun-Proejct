@@ -225,3 +225,37 @@ drop view Month_to_month_contract;
 select * from Month_to_month_contract_cumulative_sum;
 
 
+select contract,sum(totalcharges)
+from customer_churn
+group by contract;
+
+
+create view One_year_contract_cumulative_sum as
+(	
+	select *,
+    sum(totalcharges) over (partition by contract
+    order by customerid asc)
+    from customer_churn
+    where contract = 'One year'
+);
+select * from One_year_contract_cumulative_sum;
+
+create view Two_year_contract_cumulative_sum as
+(
+	select *,
+    sum(totalcharges) over (partition by contract
+    order by customerid asc)
+    from customer_churn
+    where contract = 'Two year'
+);
+select * from Two_year_contract_cumulative_sum;
+
+create view Customer_churn_count as
+(
+	select 
+    churn,
+    count(churn)as churn_Count
+    from customer_churn
+    group by churn
+);
+select * from Customer_churn_count;
