@@ -210,3 +210,18 @@ from customer_churn
 group by customer_segment;
     
         
+select * from customer_churn;
+
+create view Month_to_month_contract_cumulative_sum as
+	(select 
+	*,
+    sum(totalcharges) over(partition by contract
+    order by customerid asc)
+    from customer_churn
+	where contract = 'Month-to-month'
+);
+drop view Month_to_month_contract;
+
+select * from Month_to_month_contract_cumulative_sum;
+
+
