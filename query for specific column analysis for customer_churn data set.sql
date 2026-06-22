@@ -259,3 +259,21 @@ create view Customer_churn_count as
     group by churn
 );
 select * from Customer_churn_count;
+
+create view Male_revenue as
+(
+select gender,sum(totalcharges)as total_revenue
+from customer_churn
+where gender = 'Male'
+group by gender
+);
+select * from Male_revenue;
+
+create view Female_revenue as
+(
+select gender,sum(totalcharges)as total_revenue
+from customer_churn
+where gender = 'Female'
+group by gender
+);
+select * from Female_revenue;
