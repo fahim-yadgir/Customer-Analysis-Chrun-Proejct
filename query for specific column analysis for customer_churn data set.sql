@@ -277,3 +277,7 @@ where gender = 'Female'
 group by gender
 );
 select * from Female_revenue;
+
+select customerID,tenure
+from customer_churn
+where tenure = (select max(tenure)from customer_churn);
