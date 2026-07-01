@@ -281,3 +281,17 @@ select * from Female_revenue;
 select customerID,tenure
 from customer_churn
 where tenure = (select max(tenure)from customer_churn);
+
+select * from customer_churn;
+
+select count(SeniorCitizen)as count_SeniorCitizen
+from customer_churn;
+
+select InternetService,round(sum(TotalCharges),2)as TotalCharges
+from customer_churn
+group by InternetService;
+
+select PaymentMethod,count(case when churn = 'yes' then 1 end)as churn_count
+from customer_churn
+group by PaymentMethod;
+
